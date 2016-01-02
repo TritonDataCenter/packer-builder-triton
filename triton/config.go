@@ -9,6 +9,8 @@ import (
 type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	AccessConfig        `mapstructure:",squash"`
+	SourceMachineConfig `mapstructure:",squash"`
+	TargetImageConfig   `mapstructure:",squash"`
 
 	Comm communicator.Config `mapstructure:",squash"`
 
