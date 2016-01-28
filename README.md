@@ -2,14 +2,15 @@
 
 [HashiCorp Packer](https://packer.io) builder for [Joyent Triton](https://www.joyent.com) or private installations of [Smart Datacenter](https://www.joyent.com/private-cloud).
 
-To use:
+To build from source:
 
-1. Check this out under github.com/jen20/packer-builder-triton in your $GOPATH
-1. Update dependencies (`go list ./...` and `go get` any no local ones
-1. `go build ./... && go build`
-1. Either run templates from local directory or copy binary to `~/.packer.d/plugins`
+1. `go get github.com/joyent/packer-builder-triton`
+1. `cd $GOPATH/src/github.com/joyent/packer-builder-triton`
+1. `go get ./...`
+1. `go build ./...`
+1. Either run templates from local directory containing the binary or copy binary to `~/.packer.d/plugins`
 
-NOTE: this is a personal project and not supported either by HashiCorp or Joyent!
+TODO: Makefile!
 
 ### Example configuration
 
