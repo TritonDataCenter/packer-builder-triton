@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jen20/packer-builder-triton/triton"
+	"github.com/joyent/packer-builder-triton/triton"
 	"github.com/mitchellh/packer/packer/plugin"
 )
 

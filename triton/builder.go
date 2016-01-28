@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	BuilderId = "jen20.triton"
+	BuilderId = "joyent.triton"
 )
 
 type Builder struct {
