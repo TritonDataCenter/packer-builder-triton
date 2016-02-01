@@ -7,7 +7,7 @@ vendor: glide.yaml glide.lock
 
 install: vendor ~/.packer.d/plugins/packer-builder-triton
 
-test:
+test: vendor
 	go test $(glide nv)
 
 .PHONY: install test
