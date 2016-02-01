@@ -1,0 +1,24 @@
+package: github.com/joyent/packer-builder-triton
+import:
+- package: github.com/hashicorp/go-multierror
+- package: github.com/joyent/gocommon
+  subpackages:
+  - /client
+- package: github.com/joyent/gosdc
+  subpackages:
+  - /cloudapi
+- package: github.com/joyent/gosign
+  subpackages:
+  - /auth
+- package: github.com/mitchellh/multistep
+- package: github.com/mitchellh/packer
+  subpackages:
+  - /common
+  - helper/communicator
+  - helper/config
+  - packer
+  - packer/plugin
+  - template/interpolate
+- package: golang.org/x/crypto
+  subpackages:
+  - /ssh
