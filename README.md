@@ -1,8 +1,7 @@
 ## packer-builder-triton
 
 [HashiCorp Packer](https://packer.io) builder for
-[Joyent Triton](https://www.joyent.com) or private installations of
-[Smart Datacenter](https://www.joyent.com/private-cloud).
+[Joyent Triton](https://www.joyent.com).
 
 To build from source:
 
