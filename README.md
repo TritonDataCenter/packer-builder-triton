@@ -1,20 +1,21 @@
 ## packer-builder-triton
 
-[HashiCorp Packer](https://packer.io) builder for [Joyent Triton](https://www.joyent.com) or private installations of [Smart Datacenter](https://www.joyent.com/private-cloud).
+[HashiCorp Packer](https://packer.io) builder for
+[Joyent Triton](https://www.joyent.com).
 
 To build from source:
 
+1. Make sure [`glide`](https://github.com/Masterminds/glide) is installed (hint
+   on OS X: `brew install glide`)
+1. Set `GO15VENDOREXPERIMENT` to `1` if using Go 1.5 (default starting in 1.6)
 1. `go get github.com/joyent/packer-builder-triton`
 1. `cd $GOPATH/src/github.com/joyent/packer-builder-triton`
-1. `go get ./...`
-1. `go build ./...`
-1. Either run templates from local directory containing the binary or copy binary to `~/.packer.d/plugins`
-
-TODO: Makefile!
+1. `make install`
 
 ### Example configuration
 
-**NOTE:** Ensure that `SDC_KEY_ID` is in MD5 format (e.g.: `ssh-keygen -l -E md5 -f /Users/James/.ssh/joyent` - Mac OS X does not do this by default)
+**NOTE:** Ensure that `SDC_KEY_ID` is in MD5 format (e.g.: `ssh-keygen -l -E md5
+-f /Users/James/.ssh/joyent` - Mac OS X does not do this by default)
 
 ```json
 {
