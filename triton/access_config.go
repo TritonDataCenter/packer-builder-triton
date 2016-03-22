@@ -14,10 +14,10 @@ import (
 
 // AccessConfig is for common configuration related to Triton access
 type AccessConfig struct {
-	Endpoint string `mapstructure:"sdc_url"`
-	Account  string `mapstructure:"sdc_account"`
-	KeyID    string `mapstructure:"sdc_key_id"`
-	KeyPath  string `mapstructure:"sdc_key_path"`
+	Endpoint string `mapstructure:"triton_url"`
+	Account  string `mapstructure:"triton_account"`
+	KeyID    string `mapstructure:"triton_key_id"`
+	KeyPath  string `mapstructure:"triton_key_path"`
 }
 
 // Prepare performs basic validation on the AccessConfig
@@ -30,15 +30,15 @@ func (c *AccessConfig) Prepare(ctx *interpolate.Context) []error {
 	}
 
 	if c.Account == "" {
-		errs = append(errs, fmt.Errorf("sdc_account is required to use the triton builder"))
+		errs = append(errs, fmt.Errorf("triton_account is required to use the triton builder"))
 	}
 
 	if c.KeyID == "" {
-		errs = append(errs, fmt.Errorf("sdc_key_id is required to use the triton builder"))
+		errs = append(errs, fmt.Errorf("triton_key_id is required to use the triton builder"))
 	}
 
 	if c.KeyPath == "" {
-		errs = append(errs, fmt.Errorf("sdc_key_path is required to use the triton builder"))
+		errs = append(errs, fmt.Errorf("triton_key_path is required to use the triton builder"))
 	}
 
 	if _, err := os.Stat(c.KeyPath); err != nil {
@@ -52,9 +52,9 @@ func (c *AccessConfig) Prepare(ctx *interpolate.Context) []error {
 	return nil
 }
 
-// CreateSDCClient returns an SDC client configured with the appropriate client credentials
+// CreateTritonClient returns an SDC client configured with the appropriate client credentials
 // or an error if creating the client fails.
-func (c *AccessConfig) CreateSDCClient() (*cloudapi.Client, error) {
+func (c *AccessConfig) CreateTritonClient() (*cloudapi.Client, error) {
 	keyData, err := ioutil.ReadFile(c.KeyPath)
 	if err != nil {
 		return nil, err

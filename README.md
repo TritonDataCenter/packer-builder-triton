@@ -20,19 +20,19 @@ To build from source:
 ```json
 {
     "variables": {
-        "sdc_url": "{{env `SDC_URL`}}",
-        "sdc_account": "{{env `SDC_ACCOUNT`}}",
-        "sdc_key_id": "{{env `SDC_KEY_ID`}}",
-        "sdc_key_path": "{{env `SDC_KEY_PATH`}}"
+        "triton_url": "{{env `SDC_URL`}}",
+        "triton_account": "{{env `SDC_ACCOUNT`}}",
+        "triton_key_id": "{{env `SDC_KEY_ID`}}",
+        "triton_key_path": "{{env `SDC_KEY_PATH`}}"
     },
 
     "builders": [
         {
             "type": "triton",
-            "sdc_url": "{{user `sdc_url`}}",
-            "sdc_account": "{{user `sdc_account`}}",
-            "sdc_key_id": "{{user `sdc_key_id`}}",
-            "sdc_key_path": "{{user `sdc_key_path`}}",
+            "triton_url": "{{user `triton_url`}}",
+            "triton_account": "{{user `triton_account`}}",
+            "triton_key_id": "{{user `triton_key_id`}}",
+            "triton_key_path": "{{user `triton_key_path`}}",
 
             "source_machine_package": "g3-standard-0.25-smartos",
             "source_machine_image": "842e6fa6-6e9b-11e5-8402-1b490459e334",
