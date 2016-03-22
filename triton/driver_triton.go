@@ -98,6 +98,9 @@ func (d *driverTriton) WaitForMachineState(machineId string, state string, timeo
 	return waitFor(
 		func() (bool, error) {
 			machine, err := d.client.GetMachine(machineId)
+			if machine == nil {
+				return false, err
+			}
 			return machine.State == state, err
 		},
 		3*time.Second,
@@ -134,6 +137,9 @@ func (d *driverTriton) WaitForImageCreation(imageId string, timeout time.Duratio
 	return waitFor(
 		func() (bool, error) {
 			image, err := d.client.GetImage(imageId)
+			if image == nil {
+				return false, err
+			}
 			return image.OS != "", err
 		},
 		3*time.Second,
