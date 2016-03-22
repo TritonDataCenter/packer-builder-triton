@@ -3,8 +3,6 @@ package triton
 import (
 	"fmt"
 	"log"
-
-	"github.com/joyent/gosdc/cloudapi"
 )
 
 // Artifact is an artifact implementation that contains built Triton images.
@@ -16,7 +14,7 @@ type Artifact struct {
 	BuilderIDValue string
 
 	// SDC connection for cleanup etc
-	SDCClient *cloudapi.Client
+	Driver Driver
 }
 
 func (a *Artifact) BuilderId() string {
@@ -42,7 +40,7 @@ func (a *Artifact) State(name string) interface{} {
 
 func (a *Artifact) Destroy() error {
 	log.Printf("Deleting image ID (%s)", a.ImageID)
-	err := a.SDCClient.DeleteImage(a.ImageID)
+	err := a.Driver.DeleteImage(a.ImageID)
 	if err != nil {
 		return err
 	}

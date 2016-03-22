@@ -50,27 +50,19 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packer.Artifact, error) {
 	config := b.config
 
-	client, err := config.CreateSDCClient()
+	driver, err := NewDriverTriton(ui, config)
 	if err != nil {
 		return nil, err
 	}
 
 	state := new(multistep.BasicStateBag)
 	state.Put("config", b.config)
-	state.Put("client", client)
+	state.Put("driver", driver)
 	state.Put("hook", hook)
 	state.Put("ui", ui)
 
 	steps := []multistep.Step{
-		&StepCreateSourceMachine{
-			MachineName:            config.MachineName,
-			MachinePackage:         config.MachinePackage,
-			MachineImage:           config.MachineImage,
-			MachineNetworks:        config.MachineNetworks,
-			MachineMetadata:        config.MachineMetadata,
-			MachineTags:            config.MachineTags,
-			MachineFirewallEnabled: config.MachineFirewallEnabled,
-		},
+		&StepCreateSourceMachine{},
 		&communicator.StepConnect{
 			Config:    &config.Comm,
 			Host:      commHost,
@@ -78,15 +70,7 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 		},
 		&common.StepProvision{},
 		&StepStopMachine{},
-		&StepCreateImageFromMachine{
-			ImageName:        config.ImageName,
-			ImageVersion:     config.ImageVersion,
-			ImageDescription: config.ImageDescription,
-			ImageHomepage:    config.ImageHomepage,
-			ImageEULA:        config.ImageEULA,
-			ImageACL:         config.ImageACL,
-			ImageTags:        config.ImageTags,
-		},
+		&StepCreateImageFromMachine{},
 		&StepDeleteMachine{},
 	}
 
@@ -114,7 +98,7 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 	artifact := &Artifact{
 		ImageID:        state.Get("image").(string),
 		BuilderIDValue: BuilderId,
-		SDCClient:      client,
+		Driver:         driver,
 	}
 
 	return artifact, nil
