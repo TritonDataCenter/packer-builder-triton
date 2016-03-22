@@ -17,7 +17,7 @@ type AccessConfig struct {
 	Endpoint string `mapstructure:"triton_url"`
 	Account  string `mapstructure:"triton_account"`
 	KeyID    string `mapstructure:"triton_key_id"`
-	KeyPath  string `mapstructure:"triton_key_path"`
+	KeyMaterial  string `mapstructure:"triton_key_material"`
 }
 
 // Prepare performs basic validation on the AccessConfig
@@ -37,12 +37,8 @@ func (c *AccessConfig) Prepare(ctx *interpolate.Context) []error {
 		errs = append(errs, fmt.Errorf("triton_key_id is required to use the triton builder"))
 	}
 
-	if c.KeyPath == "" {
-		errs = append(errs, fmt.Errorf("triton_key_path is required to use the triton builder"))
-	}
-
-	if _, err := os.Stat(c.KeyPath); err != nil {
-		errs = append(errs, fmt.Errorf("Error reading private key: %s", err))
+	if c.KeyMaterial == "" {
+		errs = append(errs, fmt.Errorf("triton_key_material is required to use the triton builder"))
 	}
 
 	if len(errs) > 0 {
@@ -55,7 +51,7 @@ func (c *AccessConfig) Prepare(ctx *interpolate.Context) []error {
 // CreateTritonClient returns an SDC client configured with the appropriate client credentials
 // or an error if creating the client fails.
 func (c *AccessConfig) CreateTritonClient() (*cloudapi.Client, error) {
-	keyData, err := ioutil.ReadFile(c.KeyPath)
+	keyData, err := processKeyMaterial(c.KeyMaterial)
 	if err != nil {
 		return nil, err
 	}
@@ -81,4 +77,20 @@ func (c *AccessConfig) CreateTritonClient() (*cloudapi.Client, error) {
 
 func (c *AccessConfig) Comm() communicator.Config {
 	return communicator.Config{}
+}
+
+func processKeyMaterial(keyMaterial string) (string, error) {
+	// Check for keyMaterial being a file path
+	if _, err := os.Stat(keyMaterial); err != nil {
+		// Not a valid file. Assume that keyMaterial is the key data
+		return keyMaterial, nil
+	}
+
+	b, err := ioutil.ReadFile(keyMaterial)
+	if err != nil {
+		return "", fmt.Errorf("Error reading key_material from path '%s': %s",
+			keyMaterial, err)
+	}
+
+	return string(b), nil
 }
