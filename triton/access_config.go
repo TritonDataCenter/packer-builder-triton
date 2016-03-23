@@ -14,10 +14,10 @@ import (
 
 // AccessConfig is for common configuration related to Triton access
 type AccessConfig struct {
-	Endpoint string `mapstructure:"triton_url"`
-	Account  string `mapstructure:"triton_account"`
-	KeyID    string `mapstructure:"triton_key_id"`
-	KeyMaterial  string `mapstructure:"triton_key_material"`
+	Endpoint    string `mapstructure:"triton_url"`
+	Account     string `mapstructure:"triton_account"`
+	KeyID       string `mapstructure:"triton_key_id"`
+	KeyMaterial string `mapstructure:"triton_key_material"`
 }
 
 // Prepare performs basic validation on the AccessConfig
