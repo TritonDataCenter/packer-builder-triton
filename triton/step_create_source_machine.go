@@ -42,7 +42,7 @@ func (s *StepCreateSourceMachine) Cleanup(state multistep.StateBag) {
 	ui := state.Get("ui").(packer.Ui)
 
 	machineIdRaw, ok := state.GetOk("machine")
-	if ok {
+	if ok && machineIdRaw.(string) != "" {
 		machineId := machineIdRaw.(string)
 		ui.Say(fmt.Sprintf("Stopping source machine (%s)...", machineId))
 		err := driver.StopMachine(machineId)
