@@ -41,15 +41,5 @@ func (s *StepCreateImageFromMachine) Run(state multistep.StateBag) multistep.Ste
 }
 
 func (s *StepCreateImageFromMachine) Cleanup(state multistep.StateBag) {
-	driver := state.Get("driver").(Driver)
-	ui := state.Get("ui").(packer.Ui)
-
-	imageIdRaw, ok := state.GetOk("image")
-	if ok {
-		ui.Say("Deleting image...")
-		err := driver.DeleteImage(imageIdRaw.(string))
-		if err != nil {
-			state.Put("error", fmt.Errorf("Problem deleting image: %s", err))
-		}
-	}
+	// No cleanup
 }
