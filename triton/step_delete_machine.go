@@ -31,6 +31,8 @@ func (s *StepDeleteMachine) Run(state multistep.StateBag) multistep.StepAction {
 		return multistep.ActionHalt
 	}
 
+	state.Put("machine", "")
+
 	return multistep.ActionContinue
 }
 
