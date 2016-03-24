@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/joyent/gosdc/cloudapi"
 	"github.com/mitchellh/multistep"
 	"github.com/mitchellh/packer/packer"
 )
@@ -14,20 +13,20 @@ import (
 type StepStopMachine struct{}
 
 func (s *StepStopMachine) Run(state multistep.StateBag) multistep.StepAction {
-	sdcClient := state.Get("client").(*cloudapi.Client)
+	driver := state.Get("driver").(Driver)
 	ui := state.Get("ui").(packer.Ui)
 
-	machineID := state.Get("machine").(string)
+	machineId := state.Get("machine").(string)
 
-	ui.Say(fmt.Sprintf("Stopping source machine (%s)...", machineID))
-	err := sdcClient.StopMachine(machineID)
+	ui.Say(fmt.Sprintf("Stopping source machine (%s)...", machineId))
+	err := driver.StopMachine(machineId)
 	if err != nil {
 		state.Put("error", fmt.Errorf("Problem stopping source machine: %s", err))
 		return multistep.ActionHalt
 	}
 
-	ui.Say(fmt.Sprintf("Waiting for source machine to stop (%s)...", machineID))
-	err = waitForMachineState(sdcClient, machineID, "stopped", 10*time.Minute)
+	ui.Say(fmt.Sprintf("Waiting for source machine to stop (%s)...", machineId))
+	err = driver.WaitForMachineState(machineId, "stopped", 10*time.Minute)
 	if err != nil {
 		state.Put("error", fmt.Errorf("Problem waiting for source machine to stop: %s", err))
 		return multistep.ActionHalt

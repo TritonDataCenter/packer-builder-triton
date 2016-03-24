@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/joyent/gosdc/cloudapi"
 	"github.com/mitchellh/multistep"
 	"github.com/mitchellh/packer/packer"
 )
@@ -13,20 +12,20 @@ import (
 type StepDeleteMachine struct{}
 
 func (s *StepDeleteMachine) Run(state multistep.StateBag) multistep.StepAction {
-	sdcClient := state.Get("client").(*cloudapi.Client)
+	driver := state.Get("driver").(Driver)
 	ui := state.Get("ui").(packer.Ui)
 
-	machineID := state.Get("machine").(string)
+	machineId := state.Get("machine").(string)
 
 	ui.Say("Deleting source machine...")
-	err := sdcClient.DeleteMachine(machineID)
+	err := driver.DeleteMachine(machineId)
 	if err != nil {
 		state.Put("error", fmt.Errorf("Problem deleting source machine: %s", err))
 		return multistep.ActionHalt
 	}
 
 	ui.Say("Waiting for source machine to be deleted...")
-	err = waitForMachineDeletion(sdcClient, machineID, 10*time.Minute)
+	err = driver.WaitForMachineDeletion(machineId, 10*time.Minute)
 	if err != nil {
 		state.Put("error", fmt.Errorf("Problem waiting for source machine to be deleted: %s", err))
 		return multistep.ActionHalt
