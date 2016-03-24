@@ -3,6 +3,7 @@ package triton
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/joyent/gocommon/client"
@@ -71,7 +72,7 @@ func (c *AccessConfig) CreateTritonClient() (*cloudapi.Client, error) {
 		c.Endpoint,
 		cloudapi.DefaultAPIVersion,
 		creds,
-		&cloudapi.Logger,
+		log.New(os.Stdout, "", log.Flags()),
 	)), nil
 }
 
