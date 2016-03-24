@@ -35,15 +35,14 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 		b.config.Comm.SSHUsername = "root"
 	}
 
-	if b.config.Comm.SSHPrivateKey == "" {
-		b.config.Comm.SSHPrivateKey = b.config.KeyPath
-	}
-
 	errs = multierror.Append(errs, b.config.AccessConfig.Prepare(&b.config.ctx)...)
 	errs = multierror.Append(errs, b.config.SourceMachineConfig.Prepare(&b.config.ctx)...)
 	errs = multierror.Append(errs, b.config.Comm.Prepare(&b.config.ctx)...)
 	errs = multierror.Append(errs, b.config.TargetImageConfig.Prepare(&b.config.ctx)...)
 
+	if b.config.Comm.SSHPrivateKey == "" {
+		b.config.Comm.SSHPrivateKey = b.config.KeyMaterial
+	}
 	return nil, errs.ErrorOrNil()
 }
 
