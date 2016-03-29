@@ -20,10 +20,10 @@ To build from source:
 ```json
 {
     "variables": {
-        "triton_url": "{{env `TRITON_URL`}}",
-        "triton_account": "{{env `TRITON_ACCOUNT`}}",
-        "triton_key_id": "{{env `TRITON_KEY_ID`}}",
-        "triton_key_material": "{{env `TRITON_KEY_PATH`}}"
+        "triton_url": "{{env `SDC_URL`}}",
+        "triton_account": "{{env `SDC_ACCOUNT`}}",
+        "triton_key_id": "{{env `SDC_KEY_ID`}}",
+        "triton_key_material": "{{env `SDC_KEY_MATERIAL`}}"
     },
 
     "builders": [
