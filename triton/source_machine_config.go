@@ -34,6 +34,18 @@ func (c *SourceMachineConfig) Prepare(ctx *interpolate.Context) []error {
 		errs = append(errs, fmt.Errorf("A source_machine_image must be specified"))
 	}
 
+	if c.MachineNetworks == nil {
+		c.MachineNetworks = []string{}
+	}
+
+	if c.MachineMetadata == nil {
+		c.MachineMetadata = make(map[string]string)
+	}
+
+	if c.MachineTags == nil {
+		c.MachineTags = make(map[string]string)
+	}
+
 	if len(errs) > 0 {
 		return errs
 	}
