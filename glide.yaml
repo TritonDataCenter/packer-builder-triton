@@ -1,4 +1,6 @@
 package: github.com/joyent/packer-builder-triton
+ignore:
+  - github.com/mitchellh/packer/vendor
 import:
 - package: github.com/hashicorp/go-multierror
 - package: github.com/joyent/gocommon

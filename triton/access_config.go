@@ -3,6 +3,7 @@ package triton
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/joyent/gocommon/client"
@@ -14,10 +15,10 @@ import (
 
 // AccessConfig is for common configuration related to Triton access
 type AccessConfig struct {
-	Endpoint string `mapstructure:"sdc_url"`
-	Account  string `mapstructure:"sdc_account"`
-	KeyID    string `mapstructure:"sdc_key_id"`
-	KeyPath  string `mapstructure:"sdc_key_path"`
+	Endpoint    string `mapstructure:"triton_url"`
+	Account     string `mapstructure:"triton_account"`
+	KeyID       string `mapstructure:"triton_key_id"`
+	KeyMaterial string `mapstructure:"triton_key_material"`
 }
 
 // Prepare performs basic validation on the AccessConfig
@@ -30,19 +31,15 @@ func (c *AccessConfig) Prepare(ctx *interpolate.Context) []error {
 	}
 
 	if c.Account == "" {
-		errs = append(errs, fmt.Errorf("sdc_account is required to use the triton builder"))
+		errs = append(errs, fmt.Errorf("triton_account is required to use the triton builder"))
 	}
 
 	if c.KeyID == "" {
-		errs = append(errs, fmt.Errorf("sdc_key_id is required to use the triton builder"))
+		errs = append(errs, fmt.Errorf("triton_key_id is required to use the triton builder"))
 	}
 
-	if c.KeyPath == "" {
-		errs = append(errs, fmt.Errorf("sdc_key_path is required to use the triton builder"))
-	}
-
-	if _, err := os.Stat(c.KeyPath); err != nil {
-		errs = append(errs, fmt.Errorf("Error reading private key: %s", err))
+	if c.KeyMaterial == "" {
+		errs = append(errs, fmt.Errorf("triton_key_material is required to use the triton builder"))
 	}
 
 	if len(errs) > 0 {
@@ -52,10 +49,10 @@ func (c *AccessConfig) Prepare(ctx *interpolate.Context) []error {
 	return nil
 }
 
-// CreateSDCClient returns an SDC client configured with the appropriate client credentials
+// CreateTritonClient returns an SDC client configured with the appropriate client credentials
 // or an error if creating the client fails.
-func (c *AccessConfig) CreateSDCClient() (*cloudapi.Client, error) {
-	keyData, err := ioutil.ReadFile(c.KeyPath)
+func (c *AccessConfig) CreateTritonClient() (*cloudapi.Client, error) {
+	keyData, err := processKeyMaterial(c.KeyMaterial)
 	if err != nil {
 		return nil, err
 	}
@@ -75,10 +72,26 @@ func (c *AccessConfig) CreateSDCClient() (*cloudapi.Client, error) {
 		c.Endpoint,
 		cloudapi.DefaultAPIVersion,
 		creds,
-		&cloudapi.Logger,
+		log.New(os.Stdout, "", log.Flags()),
 	)), nil
 }
 
 func (c *AccessConfig) Comm() communicator.Config {
 	return communicator.Config{}
+}
+
+func processKeyMaterial(keyMaterial string) (string, error) {
+	// Check for keyMaterial being a file path
+	if _, err := os.Stat(keyMaterial); err != nil {
+		// Not a valid file. Assume that keyMaterial is the key data
+		return keyMaterial, nil
+	}
+
+	b, err := ioutil.ReadFile(keyMaterial)
+	if err != nil {
+		return "", fmt.Errorf("Error reading key_material from path '%s': %s",
+			keyMaterial, err)
+	}
+
+	return string(b), nil
 }
