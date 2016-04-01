@@ -51,19 +51,17 @@ imports:
 - name: github.com/jmespath/go-jmespath
   version: c01cf91b011868172fdcd9f41838e80c9d716264
 - name: github.com/joyent/gocommon
-  version: 4249b69d7f9eef45181370a000ee075d23b84fcf
+  version: ade826b8b54e81a779ccb29d358a45ba24b7809c
   subpackages:
   - /client
 - name: github.com/joyent/gosdc
-  version: e5af42dc255d490169eaea98c610cf7660913844
+  version: 314a7decc58d8136473f1849e9be59c99b12f8bf
   subpackages:
   - /cloudapi
 - name: github.com/joyent/gosign
-  version: 0da0d5f1342065321c97812b1f4ac0c2b0bab56c
+  version: a1f3aa7d52213987117e47d721bcc9a499994d5f
   subpackages:
   - /auth
-- name: github.com/juju/loggo
-  version: 8477fc936adf0e382d680310047ca27e128a309a
 - name: github.com/julienschmidt/httprouter
   version: abb0dc9f755ff0a9d818db28d9d8b9810066e2b5
 - name: github.com/kardianos/osext
