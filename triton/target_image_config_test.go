@@ -24,6 +24,20 @@ func TestTargetImageConfig_Prepare(t *testing.T) {
 	if errs == nil {
 		t.Fatalf("should error: %#v", tic)
 	}
+
+	tic = testTargetImageConfig(t)
+	tic.ImageHomepage = ""
+	errs = tic.Prepare(nil)
+	if errs == nil {
+		t.Fatalf("should error: %#v", tic)
+	}
+
+	tic = testTargetImageConfig(t)
+	tic.ImageEULA = ""
+	errs = tic.Prepare(nil)
+	if errs == nil {
+		t.Fatalf("should error: %#v", tic)
+	}
 }
 
 func testTargetImageConfig(t *testing.T) TargetImageConfig {
