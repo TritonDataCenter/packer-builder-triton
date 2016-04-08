@@ -30,14 +30,6 @@ func (c *TargetImageConfig) Prepare(ctx *interpolate.Context) []error {
 		errs = append(errs, fmt.Errorf("An image_version must be specified"))
 	}
 
-	if c.ImageACL == nil {
-		c.ImageACL = []string{}
-	}
-
-	if c.ImageTags == nil {
-		c.ImageTags = make(map[string]string)
-	}
-
 	if len(errs) > 0 {
 		return errs
 	}

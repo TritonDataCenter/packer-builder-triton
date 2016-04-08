@@ -12,14 +12,13 @@ func TestStepCreateImageFromMachine(t *testing.T) {
 	step := new(StepCreateImageFromMachine)
 	defer step.Cleanup(state)
 
-	driver := state.Get("driver").(*DriverMock)
 	state.Put("machine", "test-machine-id")
 
 	if action := step.Run(state); action != multistep.ActionContinue {
 		t.Fatalf("bad action: %#v", action)
 	}
 
-	imageIdRaw, ok := state.GetOk("image")
+	_, ok := state.GetOk("image")
 	if !ok {
 		t.Fatalf("should have image")
 	}
