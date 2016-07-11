@@ -81,6 +81,10 @@ func (d *driverTriton) GetMachine(machineId string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if machine.PrimaryIP == "" {
+		// if we don't have a primary ip return first ip address from the ip's list
+		return machine.IPs[0], nil
+	}
 
 	return machine.PrimaryIP, nil
 }
