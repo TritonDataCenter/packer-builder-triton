@@ -2,6 +2,8 @@ package triton
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 
 	"github.com/mitchellh/multistep"
 	"golang.org/x/crypto/ssh"
@@ -22,7 +24,19 @@ func commHost(state multistep.StateBag) (string, error) {
 func sshConfig(state multistep.StateBag) (*ssh.ClientConfig, error) {
 	config := state.Get("config").(Config)
 
-	signer, err := ssh.ParsePrivateKey([]byte(config.Comm.SSHPrivateKey))
+	var keyContent []byte
+	if _, err := os.Stat(config.Comm.SSHPrivateKey); err == nil {
+		// key is a filename
+		keyContent, err = ioutil.ReadFile(config.Comm.SSHPrivateKey)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// key is a []byte
+		keyContent = []byte(config.Comm.SSHPrivateKey)
+	}
+
+	signer, err := ssh.ParsePrivateKey(keyContent)
 	if err != nil {
 		return nil, fmt.Errorf("Error setting up SSH config: %s", err)
 	}
